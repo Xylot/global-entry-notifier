@@ -1,0 +1,9 @@
+*.egg-info
+*.py[co]
+*.exe
+/.coverage
+/.tox
+/dist
+.vscode/
+.venv/
+*__pycache__/
