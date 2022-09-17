@@ -11,20 +11,34 @@ import global_entry_notifier.constants
 def notify_if_available(
     locations: list[str],
     phone_number: str,
+    current_appointment: datetime.datetime,
     twilio_sid: str,
     twilio_token: str,
     twilio_number: str,
 ) -> None:
-    available_slots = {}
+    available_slots: dict[str, list[str]] = {}
 
     for location in locations:
         location_slots = _get_location_availability(location)
 
-        if location_slots:
-            available_slots[location] = [
-                _sanitize_timestamp(slot['startTimestamp'])
-                for slot in location_slots
-            ]
+        if not location_slots:
+            continue
+
+        for location_slot in location_slots:
+            slot_timestamp = datetime.datetime.strptime(
+                location_slot['startTimestamp'],
+                global_entry_notifier.constants.DATETIME_FORMAT_API,
+            )
+
+            if slot_timestamp < current_appointment:
+                if location not in available_slots:
+                    available_slots[location] = []
+
+                available_slots[location].append(
+                    slot_timestamp.strftime(
+                        global_entry_notifier.constants.DATETIME_FORMAT_SMS,
+                    ),
+                )
 
     if available_slots:
         _notify_sms(
@@ -53,15 +67,6 @@ def _get_location_availability(location: str) -> list[dict[str, str]]:
         )
 
     return response.json()
-
-
-def _sanitize_timestamp(timestamp: str) -> str:
-    original_timestamp = datetime.datetime.strptime(
-        timestamp, '%Y-%m-%dT%H:%M',
-    )
-    sanitized_timestamp = original_timestamp.strftime('%a, %b %d @ %I:%M%p')
-
-    return sanitized_timestamp
 
 
 def _notify_sms(
