@@ -8,6 +8,10 @@ import global_entry_notifier.constants
 from global_entry_notifier.notifier import notify_if_available
 
 
+class MissingCountryCodeError(Exception):
+    """The supplied phone number is missing a country code"""
+
+
 def get_args(argv: typing.Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(prog='global-entry-notifier')
 
@@ -78,8 +82,16 @@ def _add_twilio_arguments(parser: argparse.ArgumentParser) -> None:
     )
 
 
+def _ensure_country_codes(*phone_numbers: str) -> None:
+    for phone_number in phone_numbers:
+        if not phone_number.startswith('+'):
+            raise MissingCountryCodeError(phone_number)
+
+
 def main(argv: typing.Sequence[str] | None = None) -> int:
     args = get_args(argv)
+
+    _ensure_country_codes(args.phone_number, args.twilio_number)
 
     notify_if_available(
         args.locations,
