@@ -52,12 +52,12 @@ def notify_if_available(
 
 def _get_location_availability(location: str) -> list[dict[str, str]]:
     parameters = {
-        **global_entry_notifier.constants.GLOBAL_ENTRY_DEFAULT_PARAMETERS,
+        **global_entry_notifier.constants.GLOBAL_ENTRY_SLOTS_DEFAULT_PARAMETERS,  # noqa: E501
         **{'locationId': location},
     }
 
     response = requests.get(
-        global_entry_notifier.constants.GLOBAL_ENTRY_QUERY_URL,
+        global_entry_notifier.constants.GLOBAL_ENTRY_SLOTS_URL,
         params=parameters,  # type: ignore
     )
 

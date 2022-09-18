@@ -10,14 +10,26 @@ else:  # pragma: <3.8 cover
 VERSION = importlib_metadata.version('global_entry_notifier')
 
 GLOBAL_ENTRY_BASE_URL = 'https://ttp.cbp.dhs.gov'
-GLOBAL_ENTRY_QUERY_ENDPOINT = '/schedulerapi/slots'
-GLOBAL_ENTRY_QUERY_URL = (
-    f'{GLOBAL_ENTRY_BASE_URL}{GLOBAL_ENTRY_QUERY_ENDPOINT}'
+
+GLOBAL_ENTRY_SLOTS_ENDPOINT = '/schedulerapi/slots'
+GLOBAL_ENTRY_SLOTS_URL = (
+    f'{GLOBAL_ENTRY_BASE_URL}{GLOBAL_ENTRY_SLOTS_ENDPOINT}'
 )
-GLOBAL_ENTRY_DEFAULT_PARAMETERS = {
+GLOBAL_ENTRY_SLOTS_DEFAULT_PARAMETERS = {
     'orderBy': 'soonest',
     'minimum': 1,
     'limit': 3,
+}
+
+GLOBAL_ENTRY_LOCATIONS_ENDPOINT = '/schedulerapi/locations/'
+GLOBAL_ENTRY_LOCATIONS_URL = (
+    f'{GLOBAL_ENTRY_BASE_URL}{GLOBAL_ENTRY_LOCATIONS_ENDPOINT}'
+)
+GLOBAL_ENTRY_LOCATIONS_DEFAULT_PARAMETERS = {
+    'temporary': 'false',
+    'inviteOnly': 'false',
+    'operational': 'true',
+    'serviceName': 'Global Entry',
 }
 
 DATETIME_FORMAT_COMMAND_LINE_ARG = '%Y-%m-%dT%H:%M'

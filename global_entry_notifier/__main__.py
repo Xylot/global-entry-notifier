@@ -12,7 +12,7 @@ class MissingCountryCodeError(Exception):
     """The supplied phone number is missing a country code"""
 
 
-def get_args(argv: typing.Sequence[str] | None = None) -> argparse.Namespace:
+def _get_args(argv: typing.Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(prog='global-entry-notifier')
 
     parser.add_argument(
@@ -89,7 +89,7 @@ def _ensure_country_codes(*phone_numbers: str) -> None:
 
 
 def main(argv: typing.Sequence[str] | None = None) -> int:
-    args = get_args(argv)
+    args = _get_args(argv)
 
     _ensure_country_codes(args.phone_number, args.twilio_number)
 
